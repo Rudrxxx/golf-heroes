@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold: #D4AF37;
+  --color-gold-light: #E8C84A;
+  --color-gold-dark: #A88A1A;
+  --color-gold-muted: #D4AF3720;
+
+  --color-carbon: #0A0A0A;
+  --color-carbon-50: #F5F5F5;
+  --color-carbon-100: #E8E8E8;
+  --color-carbon-200: #C8C8C8;
+  --color-carbon-300: #A0A0A0;
+  --color-carbon-400: #707070;
+  --color-carbon-500: #505050;
+  --color-carbon-600: #383838;
+  --color-carbon-700: #282828;
+  --color-carbon-800: #1A1A1A;
+  --color-carbon-900: #111111;
+  --color-carbon-950: #080808;
+
+  --color-emerald: #10B981;
+  --color-emerald-dark: #059669;
+
+  --font-display: var(--font-playfair), serif;
+  --font-body: var(--font-dm-sans), sans-serif;
+  --font-mono: var(--font-dm-mono), monospace;
+
+  --animate-fade-up: fadeUp 0.6s ease forwards;
+  --animate-fade-in: fadeIn 0.4s ease forwards;
+  --animate-shimmer: shimmer 2s infinite;
+  --animate-pulse-gold: pulseGold 2s infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  --background-image-gradient-gold: linear-gradient(135deg, #D4AF37 0%, #A88A1A 100%);
+  --background-image-gradient-dark: linear-gradient(180deg, #0A0A0A 0%, #1A1A1A 100%);
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(212, 175, 55, 0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #080808;
+    color: #E8E8E8;
+  }
+
+  ::selection {
+    background: rgba(212, 175, 55, 0.3);
+    color: #E8C84A;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #111111;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #383838;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #D4AF37;
+  }
+}
+
+@layer components {
+  .gold-border {
+    border: 1px solid rgba(212, 175, 55, 0.3);
+  }
+
+  .gold-glow {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+
+  .card-dark {
+    @apply bg-carbon-900 border border-carbon-700 rounded-2xl;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #D4AF37, #E8C84A, #A88A1A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .btn-gold {
+    @apply bg-gold text-carbon-950 font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:bg-gold-light active:scale-95;
+  }
+
+  .btn-outline-gold {
+    @apply border border-gold text-gold font-semibold px-6 py-3 rounded-xl transition-all duration-200 hover:bg-gold hover:text-carbon-950 active:scale-95;
+  }
+
+  .input-dark {
+    @apply bg-carbon-800 border border-carbon-600 rounded-xl px-4 py-3 text-carbon-100 placeholder-carbon-400 focus:outline-none focus:border-gold transition-colors w-full;
+  }
+
+  .section-padding {
+    @apply px-4 md:px-8 lg:px-16 xl:px-24;
+  }
+
+  .noise-overlay {
+    position: relative;
+  }
+
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+@layer utilities {
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+}
