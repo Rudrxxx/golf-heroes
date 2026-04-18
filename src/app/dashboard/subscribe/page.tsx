@@ -2,11 +2,36 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { PLANS } from "@/lib/stripe";
 import { formatCurrency } from "@/lib/utils";
 import { Check, Shield, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+
+// Plan data defined here directly — never import stripe.ts on the client
+const PLANS = {
+  monthly: {
+    name: "Monthly",
+    price: 9.99,
+    interval: "month",
+    prize_pool_contribution: 4.0,
+    charity_min: 1.0,
+  },
+  yearly: {
+    name: "Yearly",
+    price: 99.99,
+    interval: "year",
+    prize_pool_contribution: 44.0,
+    charity_min: 10.0,
+  },
+} as const;
+
+const features = [
+  "Enter monthly prize draws with your golf scores",
+  "Support a charity of your choice automatically",
+  "View draw results and match history",
+  "Winner verification and payout tracking",
+  "Cancel anytime, no lock-in",
+];
 
 function SubscribePage() {
   const searchParams = useSearchParams();
@@ -34,14 +59,6 @@ function SubscribePage() {
     }
     setLoading(false);
   };
-
-  const features = [
-    "Enter monthly prize draws with your golf scores",
-    "Support a charity of your choice automatically",
-    "View draw results and match history",
-    "Winner verification and payout tracking",
-    "Cancel anytime, no lock-in",
-  ];
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
