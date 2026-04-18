@@ -25,6 +25,7 @@ export default function AdminDrawsPage() {
     setLoading(false);
   };
  
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchDraws(); }, []);
  
   const createDraw = async () => {
@@ -50,7 +51,6 @@ export default function AdminDrawsPage() {
       .eq("status", "published")
       .order("draw_year", { ascending: false })
       .order("draw_month", { ascending: false })
-      .limit(1)
       .maybeSingle();
  
     // Rollover applies if last draw had no 5-match winner

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   switch (event.type) {
     case "checkout.session.completed": {
-      const session = event.data.object as Stripe.CheckoutSession;
+      const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.user_id;
       const plan = session.metadata?.plan;
       const subscriptionId = session.subscription as string;
@@ -26,25 +26,27 @@ export async function POST(req: NextRequest) {
       if (!userId) break;
 
       const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const current_period_end = Number((subscription as unknown as Record<string, unknown>).current_period_end);
       await supabase.from("profiles").update({
         subscription_status: "active",
         subscription_plan: plan,
         stripe_subscription_id: subscriptionId,
-        subscription_renewal_date: new Date(subscription.current_period_end * 1000).toISOString(),
+        subscription_renewal_date: new Date(current_period_end * 1000).toISOString(),
       }).eq("id", userId);
       break;
     }
 
     case "invoice.paid": {
-      const invoice = event.data.object as Stripe.Invoice;
+      const invoice = event.data.object as Stripe.Invoice & { subscription: string | null };
       const subscriptionId = invoice.subscription as string;
       const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const current_period_end = Number((subscription as unknown as Record<string, unknown>).current_period_end);
       const userId = subscription.metadata?.user_id;
       if (!userId) break;
 
       await supabase.from("profiles").update({
         subscription_status: "active",
-        subscription_renewal_date: new Date(subscription.current_period_end * 1000).toISOString(),
+        subscription_renewal_date: new Date(current_period_end * 1000).toISOString(),
       }).eq("id", userId);
       break;
     }
@@ -61,7 +63,7 @@ export async function POST(req: NextRequest) {
     }
 
     case "invoice.payment_failed": {
-      const invoice = event.data.object as Stripe.Invoice;
+      const invoice = event.data.object as Stripe.Invoice & { subscription: string | null };
       const subscriptionId = invoice.subscription as string;
       if (!subscriptionId) break;
       const sub = await stripe.subscriptions.retrieve(subscriptionId);
